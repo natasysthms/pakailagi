@@ -1,0 +1,366 @@
+/* =========================================
+   DONATION PAGE STYLES (Pure CSS)
+   ========================================= */
+
+.donation-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: var(--space-xl);
+}
+
+/* 1. Hero & Mode Switcher */
+.donation-hero-section {
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.donation-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  line-height: 0.95;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.donation-lead-text {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--color-on-surface-variant);
+  max-width: 680px;
+  margin-top: 1rem;
+}
+
+.donation-mode-tabs {
+  display: inline-flex;
+  background-color: var(--color-surface-container-high);
+  padding: 0.35rem;
+  border-radius: var(--radius-full);
+  gap: 0.25rem;
+  margin-top: 1.5rem;
+}
+
+.donation-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-on-surface-variant);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.donation-mode-btn.active {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 100% Non-Monetary Banner */
+.non-monetary-banner {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 12px 28px -6px rgba(1, 71, 46, 0.08);
+}
+
+/* 2. Section: Organization Needs */
+.donation-section-wrap {
+  margin-top: 3rem;
+}
+
+.section-head-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-head-row {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.org-needs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .org-needs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .org-needs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.org-card {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 46, 29, 0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.org-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.org-card-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 12rem;
+  overflow: hidden;
+  background-color: var(--color-surface-container);
+}
+
+.org-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.org-badge-urgency {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.org-badge-urgency.mendesak {
+  background-color: var(--color-error);
+  color: var(--color-on-error);
+}
+
+.org-badge-urgency.aktif {
+  background-color: var(--color-secondary-fixed);
+  color: var(--color-primary);
+}
+
+.org-card-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.org-card-title {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.org-card-location {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-on-surface-variant);
+  margin-top: 0.25rem;
+}
+
+.org-card-req {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-on-surface);
+  margin-top: 0.5rem;
+}
+
+/* Progress bar */
+.org-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.org-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--color-on-surface-variant);
+  font-weight: 600;
+}
+
+.org-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-container-high);
+  overflow: hidden;
+}
+
+.org-progress-bar {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  transition: width 0.5s ease;
+}
+
+/* 3. Section: Ready-to-Distribute Donor Items */
+.donor-items-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .donor-items-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .donor-items-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.donor-item-card {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 46, 29, 0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.donor-item-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.donor-item-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--color-surface-container);
+}
+
+.donor-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.donor-item-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.donor-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.donor-tag-chip {
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-container);
+  color: var(--color-on-surface-variant);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* 4. Circular Donation 4-Step Flow */
+.flow-section-card {
+  background-color: var(--color-surface-container-low);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 1.5rem;
+  margin-top: 4rem;
+}
+
+@media (min-width: 768px) {
+  .flow-section-card {
+    padding: 3.5rem;
+  }
+}
+
+.flow-steps-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .flow-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .flow-steps-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.flow-step-item {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid rgba(0, 46, 29, 0.06);
+}
+
+.flow-step-num {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  font-family: var(--font-headline);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

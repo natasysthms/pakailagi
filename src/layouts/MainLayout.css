@@ -1,0 +1,14 @@
+.main-layout-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+}
+
+.main-content {
+  width: 100%;
+  padding-top: 5rem; /* Navbar height compensation */
+  min-height: calc(100vh - 5rem);
+  flex: 1 0 auto;
+}

@@ -1,0 +1,358 @@
+.garment-card {
+  position: relative;
+  background-color: var(--color-surface-container-lowest);
+  border-radius: var(--radius-xl);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 12px 32px -8px rgba(1, 71, 46, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.garment-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 44px -10px rgba(1, 71, 46, 0.16);
+}
+
+.garment-media-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  background-color: var(--color-surface-container);
+}
+
+.garment-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.garment-card:hover .garment-img {
+  transform: scale(1.05);
+}
+
+.garment-badges-top-left {
+  position: absolute;
+  top: 0.875rem;
+  left: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.badge-pill-size {
+  background-color: rgba(254, 250, 224, 0.9);
+  backdrop-filter: blur(8px);
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-size: 9px;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.badge-pill-grade {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: 9px;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.08em;
+}
+
+.garment-badges-top-right {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  z-index: 2;
+}
+
+.badge-pill-status {
+  background-color: var(--color-surface-bright);
+  color: var(--color-primary);
+  font-size: 10px;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-container);
+}
+
+.garment-eco-strip {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  background-color: rgba(254, 250, 224, 0.92);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-full);
+  padding: 0.375rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+}
+
+.garment-eco-metric {
+  font-size: 11px;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+
+.garment-eco-water {
+  font-family: var(--font-body);
+  font-size: 10px;
+  color: var(--color-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Hover Scrim Overlay */
+.garment-hover-scrim {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 46, 29, 0.78);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  z-index: 3;
+}
+
+.garment-card:hover .garment-hover-scrim {
+  opacity: 1;
+}
+
+.scrim-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--color-surface);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.scrim-desc {
+  font-size: 12px;
+  color: rgba(254, 250, 224, 0.85);
+  margin: 0;
+  max-width: 14rem;
+}
+
+.scrim-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 13rem;
+  margin-top: 0.25rem;
+}
+
+.scrim-btn-primary {
+  width: 100%;
+  background-color: var(--color-secondary-fixed);
+  color: var(--color-on-secondary-fixed);
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.scrim-btn-primary:hover {
+  background-color: var(--color-surface);
+}
+
+.scrim-btn-outline {
+  width: 100%;
+  background-color: rgba(254, 250, 224, 0.2);
+  color: var(--color-surface);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+  transition: background-color 0.2s ease;
+  text-align: center;
+}
+
+.scrim-btn-outline:hover {
+  background-color: rgba(254, 250, 224, 0.35);
+}
+
+/* Card Info Block */
+.garment-info {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.garment-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.garment-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 22px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.garment-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-on-surface-variant);
+  font-size: 12px;
+}
+
+.garment-location {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.garment-material {
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+.garment-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+}
+
+.garment-price {
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 1;
+  color: var(--color-primary);
+}
+
+.garment-price-retail {
+  font-size: 12px;
+  color: var(--color-on-surface-variant);
+  text-decoration: line-through;
+}
+
+/* Card Curator Footer */
+.garment-curator-footer {
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--color-surface-container);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.curator-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.curator-avatar-initials {
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-secondary-fixed);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.curator-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.curator-name {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  letter-spacing: 0.05em;
+}
+
+.curator-location {
+  font-size: 11px;
+  color: var(--color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.bookmark-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-container);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.bookmark-btn:hover {
+  background-color: var(--color-secondary-fixed);
+}
+
+.bookmark-btn.bookmarked {
+  background-color: var(--color-secondary-fixed);
+  color: var(--color-primary);
+}

@@ -6,13 +6,13 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-bottom: var(--space-xl);
+  padding-bottom: 6rem;
 }
 
 /* 1. Hero Section */
 .impact-hero-section {
-  padding-top: 1.5rem;
-  padding-bottom: 2rem;
+  padding-top: 3rem;
+  padding-bottom: 3.5rem;
 }
 
 .impact-headline {
@@ -137,7 +137,7 @@
 
 /* 2. Interactive Scenario Selector Section */
 .scenario-section {
-  margin-top: 3.5rem;
+  margin-top: 5rem;
   background-color: var(--color-surface-container-low);
   border-radius: var(--radius-xl);
   padding: 2rem 1.5rem;
@@ -214,7 +214,8 @@
 
 /* 3. Mathematical Formula Section */
 .math-section {
-  margin-top: 3.5rem;
+  margin-top: 5rem;
+  padding-bottom: 1rem;
 }
 
 .math-grid {

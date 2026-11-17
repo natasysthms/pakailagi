@@ -129,12 +129,10 @@ export default function ImpactPage() {
       <section className="container-custom">
         <div className="scenario-section">
           <div className="scenario-header-row">
-            <div>
-              <span className="badge badge-secondary" style={{ marginBottom: '0.5rem' }}>Model Simulasi Dinamis</span>
-              <h2 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-                Pilih Skenario Substitusi Pembelian
-              </h2>
-              <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px', maxWidth: '580px', marginTop: '0.25rem' }}>
+            <div className="section-label-group">
+              <span className="badge badge-secondary">Model Simulasi Dinamis</span>
+              <h2 className="section-title">Pilih Skenario Substitusi Pembelian</h2>
+              <p className="section-desc">
                 Tingkat substitusi merefleksikan seberapa besar probabilitas pakaian bekas ini benar-benar menggantikan pembelian produk tekstil baru dari pabrik retail.
               </p>
             </div>
@@ -200,11 +198,9 @@ export default function ImpactPage() {
           <div className="math-grid">
             {/* Box 1: Formula */}
             <div className="math-box">
-              <div>
-                <span className="badge badge-primary" style={{ marginBottom: '0.5rem' }}>Rumus Ilmiah</span>
-                <h3 style={{ fontFamily: 'var(--font-headline)', fontSize: '20px', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-                  Parameter &amp; Formulasi Matematis
-                </h3>
+              <div className="section-label-group">
+                <span className="badge badge-primary">Rumus Ilmiah</span>
+                <h3 className="section-title" style={{ fontSize: '20px' }}>Parameter &amp; Formulasi Matematis</h3>
               </div>
 
               <div className="formula-display">
@@ -222,11 +218,9 @@ export default function ImpactPage() {
 
             {/* Box 2: Emission Factors Table */}
             <div className="math-box">
-              <div>
-                <span className="badge badge-secondary" style={{ marginBottom: '0.5rem' }}>Data Serat Tekstil</span>
-                <h3 style={{ fontFamily: 'var(--font-headline)', fontSize: '20px', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-                  Faktor Emisi Rata-Rata Serat
-                </h3>
+              <div className="section-label-group">
+                <span className="badge badge-secondary">Data Serat Tekstil</span>
+                <h3 className="section-title" style={{ fontSize: '20px' }}>Faktor Emisi Rata-Rata Serat</h3>
               </div>
 
               <div style={{ overflowX: 'auto' }}>
@@ -255,14 +249,12 @@ export default function ImpactPage() {
       </section>
 
       {/* 4. Category Breakdown Progress Bars */}
-      <section className="container-custom" style={{ marginTop: '3.5rem' }}>
+      <section className="container-custom" style={{ marginTop: '5rem' }}>
         <div style={{ backgroundColor: 'var(--color-surface)', border: '1px solid rgba(0,46,29,0.08)', borderRadius: 'var(--radius-xl)', padding: '2.5rem 1.5rem' }}>
-          <div>
-            <span className="badge badge-secondary" style={{ marginBottom: '0.5rem' }}>Dekomposisi Kategori</span>
-            <h3 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.5rem, 3.5vw, 2.25rem)', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-              Dekomposisi Berdasarkan Kategori Busana
-            </h3>
-            <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px', marginTop: '0.25rem' }}>
+          <div className="section-label-group">
+            <span className="badge badge-secondary">Dekomposisi Kategori</span>
+            <h3 className="section-title">Dekomposisi Berdasarkan Kategori Busana</h3>
+            <p className="section-desc">
               Kontribusi reduksi jejak karbon terbesar disumbangkan oleh kategori pakaian berat yang membutuhkan energi pemrosesan tertinggi.
             </p>
           </div>
@@ -284,7 +276,7 @@ export default function ImpactPage() {
       </section>
 
       {/* 5. Green Software Engineering Box */}
-      <section className="container-custom" style={{ marginTop: '3.5rem' }}>
+      <section className="container-custom" style={{ marginTop: '3rem', marginBottom: '1rem' }}>
         <div style={{ backgroundColor: 'var(--color-surface-container-low)', borderRadius: 'var(--radius-lg)', padding: '1.75rem', display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
           <span className="material-symbols-outlined" style={{ fontSize: '32px', color: 'var(--color-primary)', flexShrink: 0 }}>
             terminal

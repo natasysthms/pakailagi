@@ -169,11 +169,9 @@ export default function DonationPage() {
       <section className="donation-section-wrap">
         <div className="container-custom">
           <div className="section-head-row">
-            <div>
-              <span className="badge badge-secondary" style={{ marginBottom: '0.25rem' }}>Lembaga Terverifikasi</span>
-              <h2 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-                Kebutuhan Mendesak Lembaga
-              </h2>
+            <div className="section-label-group">
+              <span className="badge badge-secondary">Lembaga Terverifikasi</span>
+              <h2 className="section-title">Kebutuhan Mendesak Lembaga</h2>
             </div>
 
             {/* Category Filter Pills */}
@@ -251,12 +249,10 @@ export default function DonationPage() {
       <section className="donation-section-wrap">
         <div className="container-custom">
           <div className="section-head-row">
-            <div>
-              <span className="badge badge-primary" style={{ marginBottom: '0.25rem' }}>Donatur Perorangan</span>
-              <h2 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-                Pakaian Donasi Siap Salur
-              </h2>
-              <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px', marginTop: '0.25rem' }}>
+            <div className="section-label-group">
+              <span className="badge badge-primary">Donatur Perorangan</span>
+              <h2 className="section-title">Pakaian Donasi Siap Salur</h2>
+              <p className="section-desc">
                 Paket garmen bersih yang siap didistribusikan langsung kepada yayasan, komunitas, atau penerima manfaat.
               </p>
             </div>
@@ -318,12 +314,10 @@ export default function DonationPage() {
       {/* 4. Section: 4-Step Circular Flow */}
       <section className="container-custom">
         <div className="flow-section-card">
-          <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
-            <span className="badge badge-primary" style={{ marginBottom: '0.5rem' }}>Transparansi Penyaluran</span>
-            <h2 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-              Alur Donasi Sirkular
-            </h2>
-            <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px', marginTop: '0.5rem' }}>
+          <div className="section-label-group centered" style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <span className="badge badge-primary">Transparansi Penyaluran</span>
+            <h2 className="section-title">Alur Donasi Sirkular</h2>
+            <p className="section-desc">
               Memastikan setiap helai pakaian sampai ke tangan yang tepat tanpa risiko terbuang ke TPA.
             </p>
           </div>

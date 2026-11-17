@@ -205,6 +205,50 @@ img {
   transition: opacity 0.3s ease;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Section Label Group
+   Wrapper untuk pola Badge + H2 + P yang dipakai di semua halaman.
+   ───────────────────────────────────────────────────────────── */
+.section-label-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.section-label-group .badge {
+  width: fit-content;
+  margin-bottom: 0.75rem;
+}
+
+.section-label-group .section-title {
+  font-family: var(--font-headline);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.section-label-group .section-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-on-surface-variant);
+  margin-top: 0.75rem;
+  max-width: 620px;
+}
+
+/* Versi terpusat (untuk section yang center-aligned) */
+.section-label-group.centered {
+  align-items: center;
+  text-align: center;
+}
+
+.section-label-group.centered .section-desc {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Toast Notification */
 .toast-floating {
   position: fixed;

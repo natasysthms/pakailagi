@@ -308,12 +308,10 @@ export default function RepairPage() {
       <section className="repair-guide-section">
         <div className="container-custom">
           <div className="repair-guide-card">
-            <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
-              <span className="badge badge-secondary" style={{ marginBottom: '0.5rem' }}>Edukasi Reparasi</span>
-              <h2 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-                Cara Mudah Melakukan Reparasi
-              </h2>
-              <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px', marginTop: '0.5rem' }}>
+            <div className="section-label-group centered" style={{ maxWidth: '600px', margin: '0 auto' }}>
+              <span className="badge badge-secondary">Edukasi Reparasi</span>
+              <h2 className="section-title">Cara Mudah Melakukan Reparasi</h2>
+              <p className="section-desc">
                 Alur sederhana untuk merawat kembali garmen berharga Anda.
               </p>
             </div>
@@ -354,13 +352,14 @@ export default function RepairPage() {
       </section>
 
       {/* 5. Callout: Are You an Artisan? */}
-      <section className="container-custom">
+      <section className="artisan-cta-section-wrap container-custom">
         <div className="artisan-cta-banner">
-          <div>
-            <h3 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.5rem, 3.5vw, 2.25rem)', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
+          <div className="section-label-group">
+            <span className="badge badge-primary">Kemitraan Komunitas</span>
+            <h3 className="section-title">
               Apakah Anda Penjahit atau Pengrajin Reparasi?
             </h3>
-            <p style={{ color: 'var(--color-on-secondary-container)', fontSize: '14px', maxWidth: '640px', marginTop: '0.5rem', lineHeight: '22px' }}>
+            <p className="section-desc">
               Bergabunglah bersama jejaring terverifikasi PakaiLagi secara gratis. Dapatkan pelanggan baru yang sadar pentingnya merawat busana berkelanjutan tanpa potongan komisi sepeser pun.
             </p>
           </div>

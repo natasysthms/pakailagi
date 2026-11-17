@@ -144,11 +144,9 @@ export default function CareGuidePage() {
       {/* 2. Fiber Protocols Section */}
       <section className="care-protocols-section">
         <div className="container-custom">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <span className="badge badge-secondary" style={{ width: 'fit-content' }}>Protokol Kuratorial</span>
-            <h2 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-              Protokol Pemeliharaan Tekstil
-            </h2>
+          <div className="section-label-group">
+            <span className="badge badge-secondary">Protokol Kuratorial</span>
+            <h2 className="section-title">Protokol Pemeliharaan Tekstil</h2>
           </div>
 
           {/* Search bar */}
@@ -249,14 +247,12 @@ export default function CareGuidePage() {
       </section>
 
       {/* 3. International Care Symbols Dictionary Bento */}
-      <section className="container-custom">
+      <section className="care-symbols-section-wrap container-custom">
         <div className="symbols-bento-section">
-          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
-            <span className="badge badge-primary" style={{ marginBottom: '0.5rem' }}>Panduan Universal</span>
-            <h2 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-              Kamus Simbol Label Cuci Pakaian
-            </h2>
-            <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px', marginTop: '0.5rem' }}>
+          <div className="section-label-group centered" style={{ maxWidth: '640px', margin: '0 auto' }}>
+            <span className="badge badge-primary">Panduan Universal</span>
+            <h2 className="section-title">Kamus Simbol Label Cuci Pakaian</h2>
+            <p className="section-desc">
               Memahami arti 5 simbol dasar standar internasional (ISO 3758) yang tertera di label leher dan samping pakaian Anda.
             </p>
           </div>
@@ -351,26 +347,15 @@ export default function CareGuidePage() {
       </section>
 
       {/* 4. Bottom Callout: Need Repair? */}
-      <section className="container-custom" style={{ marginTop: '3.5rem' }}>
-        <div
-          style={{
-            backgroundColor: 'var(--color-primary-container)',
-            color: 'var(--color-surface)',
-            borderRadius: 'var(--radius-xl)',
-            padding: '2.5rem 1.5rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.5rem',
-            alignItems: 'flex-start',
-            boxShadow: 'var(--shadow-xl)'
-          }}
-        >
-          <div>
-            <span className="badge badge-secondary" style={{ marginBottom: '0.5rem' }}>Solusi Kerusakan Garmen</span>
-            <h3 style={{ fontFamily: 'var(--font-headline)', fontSize: 'clamp(1.5rem, 3.5vw, 2.25rem)', textTransform: 'uppercase', color: 'var(--color-surface)' }}>
+      {/* 4. Banner: Solusi Kerusakan Garmen */}
+      <section className="care-repair-banner-wrap container-custom">
+        <div className="care-repair-banner">
+          <div className="section-label-group">
+            <span className="badge badge-secondary">Solusi Kerusakan Garmen</span>
+            <h3 className="section-title">
               Punya Pakaian dengan Robek atau Kancing Lepas?
             </h3>
-            <p style={{ color: 'rgba(254, 250, 224, 0.85)', fontSize: '14px', maxWidth: '640px', marginTop: '0.5rem', lineHeight: '22px' }}>
+            <p className="section-desc">
               Jangan biarkan menumpuk di dasar lemari. Hubungi mitra penjahit dan seniman restorasi terverifikasi kami untuk memperbaikinya dengan teknik darning, sulam sashiko, atau alterasi.
             </p>
           </div>

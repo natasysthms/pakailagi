@@ -6,13 +6,13 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-bottom: var(--space-xl);
+  padding-bottom: 6rem;
 }
 
 /* 1. Hero & Mode Switcher */
 .donation-hero-section {
-  padding-top: 1.5rem;
-  padding-bottom: 2rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 
 .donation-headline {
@@ -81,14 +81,18 @@
 
 /* 2. Section: Organization Needs */
 .donation-section-wrap {
-  margin-top: 3rem;
+  margin-top: 4.5rem;
+}
+
+.donation-section-wrap + .donation-section-wrap {
+  margin-top: 5rem;
 }
 
 .section-head-row {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 @media (min-width: 768px) {
@@ -314,7 +318,7 @@
   background-color: var(--color-surface-container-low);
   border-radius: var(--radius-xl);
   padding: 2.5rem 1.5rem;
-  margin-top: 4rem;
+  margin-top: 5.5rem;
 }
 
 @media (min-width: 768px) {

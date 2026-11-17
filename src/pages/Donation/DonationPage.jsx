@@ -175,13 +175,12 @@ export default function DonationPage() {
             </div>
 
             {/* Category Filter Pills */}
-            <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.25rem' }}>
+            <div className="org-category-pills">
               {ORG_CATEGORIES.map((cat) => (
                 <button
                   key={cat}
                   type="button"
-                  className={`btn ${selectedCategory === cat ? 'btn-primary' : 'btn-outline'}`}
-                  style={{ fontSize: '10px', padding: '0.4rem 0.85rem' }}
+                  className={`org-category-pill ${selectedCategory === cat ? 'active' : ''}`}
                   onClick={() => setSelectedCategory(cat)}
                 >
                   {cat}
@@ -272,9 +271,15 @@ export default function DonationPage() {
               <div key={item.id} className="donor-item-card">
                 <div className="donor-item-img-wrap">
                   <img src={item.image} alt={item.title} className="donor-item-img" loading="lazy" />
-                  <span className="badge badge-secondary" style={{ position: 'absolute', top: '0.75rem', left: '0.75rem' }}>
-                    Gratis Donasi
-                  </span>
+                  <div className="donor-card-badges-bar">
+                    <span className={`donor-badge-status ${item.status?.toLowerCase().includes('tersedia') ? 'tersedia' : 'menunggu'}`}>
+                      {item.status || 'Tersedia'}
+                    </span>
+                    <span className="donor-badge-free">
+                      <span className="material-symbols-outlined">volunteer_activism</span>
+                      <span>Gratis Donasi</span>
+                    </span>
+                  </div>
                 </div>
                 <div className="donor-item-body">
                   <div>
@@ -372,7 +377,7 @@ export default function DonationPage() {
           <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <div>
-                <span className="badge badge-secondary" style={{ marginBottom: '0.25rem' }}>Komitmen Donasi Fisik</span>
+                <span className="badge badge-secondary">Komitmen Donasi Fisik</span>
                 <h3 className="modal-title">Salurkan Pakaian Layak</h3>
               </div>
               <button type="button" className="modal-close-btn" onClick={closeModal}>
@@ -396,21 +401,26 @@ export default function DonationPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleDonateSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginTop: '1rem' }}>
-                <div style={{ padding: '0.85rem', backgroundColor: 'var(--color-surface-container-low)', borderRadius: 'var(--radius-md)' }}>
-                  <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-secondary)', fontWeight: 700 }}>
-                    Target Penyaluran:
-                  </div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-primary)', marginTop: '0.25rem' }}>
-                    {selectedTarget?.orgName}
-                  </div>
-                  <div style={{ fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>
-                    Kebutuhan: {selectedTarget?.requirement}
+              <form onSubmit={handleDonateSubmit} className="modal-form-wrap">
+                <div className="modal-summary-box">
+                  <span className="material-symbols-outlined" style={{ fontSize: '32px', color: 'var(--color-primary)', flexShrink: 0 }}>
+                    apartment
+                  </span>
+                  <div>
+                    <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-secondary)', fontWeight: 700 }}>
+                      Target Penyaluran:
+                    </div>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-primary)', marginTop: '0.2rem' }}>
+                      {selectedTarget?.orgName}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--color-on-surface-variant)', marginTop: '0.2rem' }}>
+                      Kebutuhan: {selectedTarget?.requirement}
+                    </div>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="don-name" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="don-name" className="modal-label">
                     Nama Lengkap Donatur
                   </label>
                   <input
@@ -424,8 +434,8 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="don-phone" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="don-phone" className="modal-label">
                     Nomor WhatsApp
                   </label>
                   <input
@@ -439,8 +449,8 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="don-qty" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="don-qty" className="modal-label">
                     Estimasi Jumlah Potong Pakaian
                   </label>
                   <input
@@ -454,8 +464,8 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="don-method" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="don-method" className="modal-label">
                     Metode Penyerahan
                   </label>
                   <select
@@ -469,7 +479,12 @@ export default function DonationPage() {
                   </select>
                 </div>
 
-                <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={submitting}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', padding: '0.9rem 1.5rem' }}
+                  disabled={submitting}
+                >
                   {submitting ? 'Memproses Komitmen...' : 'Konfirmasi Komitmen Donasi'}
                 </button>
               </form>
@@ -484,7 +499,7 @@ export default function DonationPage() {
           <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <div>
-                <span className="badge badge-primary" style={{ marginBottom: '0.25rem' }}>Penerima Manfaat</span>
+                <span className="badge badge-primary">Penerima Manfaat</span>
                 <h3 className="modal-title">Ajukan Permintaan Pakaian</h3>
               </div>
               <button type="button" className="modal-close-btn" onClick={closeModal}>
@@ -508,21 +523,26 @@ export default function DonationPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleRequestSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginTop: '1rem' }}>
-                <div style={{ padding: '0.85rem', backgroundColor: 'var(--color-surface-container-low)', borderRadius: 'var(--radius-md)' }}>
-                  <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-secondary)', fontWeight: 700 }}>
-                    Item Donasi Terpilih:
-                  </div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-primary)', marginTop: '0.25rem' }}>
-                    {selectedTarget?.title}
-                  </div>
-                  <div style={{ fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>
-                    Donatur: {selectedTarget?.donorName} ({selectedTarget?.donorLocation})
+              <form onSubmit={handleRequestSubmit} className="modal-form-wrap">
+                <div className="modal-summary-box">
+                  <span className="material-symbols-outlined" style={{ fontSize: '32px', color: 'var(--color-primary)', flexShrink: 0 }}>
+                    inventory_2
+                  </span>
+                  <div>
+                    <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-secondary)', fontWeight: 700 }}>
+                      Item Donasi Terpilih:
+                    </div>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-primary)', marginTop: '0.2rem' }}>
+                      {selectedTarget?.title}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--color-on-surface-variant)', marginTop: '0.2rem' }}>
+                      Donatur: {selectedTarget?.donorName} ({selectedTarget?.donorLocation})
+                    </div>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="req-inst-name" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="req-inst-name" className="modal-label">
                     Nama Lembaga / Komunitas / Individu
                   </label>
                   <input
@@ -536,8 +556,8 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="req-pic" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="req-pic" className="modal-label">
                     Penanggung Jawab &amp; No. WhatsApp
                   </label>
                   <input
@@ -551,8 +571,8 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="req-address" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="req-address" className="modal-label">
                     Alamat Lengkap Pengiriman Paket
                   </label>
                   <textarea
@@ -566,8 +586,8 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="req-reason" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="req-reason" className="modal-label">
                     Alasan Kebutuhan Pakaian
                   </label>
                   <textarea
@@ -581,7 +601,12 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={submitting}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', padding: '0.9rem 1.5rem' }}
+                  disabled={submitting}
+                >
                   {submitting ? 'Mengirim Pengajuan...' : 'Kirim Permintaan Donasi'}
                 </button>
               </form>
@@ -596,7 +621,7 @@ export default function DonationPage() {
           <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <div>
-                <span className="badge badge-secondary" style={{ marginBottom: '0.25rem' }}>Donatur Perorangan</span>
+                <span className="badge badge-secondary">Donatur Perorangan</span>
                 <h3 className="modal-title">Unggah Pakaian Donasi</h3>
               </div>
               <button type="button" className="modal-close-btn" onClick={closeModal}>
@@ -620,9 +645,9 @@ export default function DonationPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleUploadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginTop: '1rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="up-title" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+              <form onSubmit={handleUploadSubmit} className="modal-form-wrap">
+                <div className="modal-input-group">
+                  <label htmlFor="up-title" className="modal-label">
                     Judul Paket Pakaian
                   </label>
                   <input
@@ -636,9 +661,9 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                    <label htmlFor="up-cat" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="modal-input-group">
+                    <label htmlFor="up-cat" className="modal-label">
                       Kategori Pakaian
                     </label>
                     <select
@@ -654,8 +679,8 @@ export default function DonationPage() {
                     </select>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                    <label htmlFor="up-qty" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                  <div className="modal-input-group">
+                    <label htmlFor="up-qty" className="modal-label">
                       Jumlah (Potong)
                     </label>
                     <input
@@ -670,8 +695,8 @@ export default function DonationPage() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="up-cond" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="up-cond" className="modal-label">
                     Kondisi Kebersihan
                   </label>
                   <input
@@ -685,8 +710,8 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="up-notes" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="up-notes" className="modal-label">
                     Catatan Pengiriman / Domisili
                   </label>
                   <textarea
@@ -699,7 +724,12 @@ export default function DonationPage() {
                   />
                 </div>
 
-                <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={submitting}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', padding: '0.9rem 1.5rem' }}
+                  disabled={submitting}
+                >
                   {submitting ? 'Mendaftarkan...' : 'Daftarkan ke Donasi Siap Salur'}
                 </button>
               </form>

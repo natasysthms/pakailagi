@@ -82,6 +82,85 @@ button:disabled {
   opacity: 0.6;
 }
 
+/* Universal Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 4px 14px rgba(0, 46, 29, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-container);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 46, 29, 0.28);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary-fixed);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid rgba(0, 46, 29, 0.2);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-container);
+  transform: translateY(-1px);
+}
+
+/* Badge System */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge-primary {
+  background-color: rgba(0, 46, 29, 0.1);
+  color: var(--color-primary);
+}
+
+.badge-secondary {
+  background-color: var(--color-secondary-fixed);
+  color: var(--color-on-secondary-container);
+}
+
 img {
   max-width: 100%;
   display: block;
@@ -190,19 +269,188 @@ img {
   animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-/* Modal Backdrop */
+/* ─────────────────────────────────────────────────────────────
+   Modal Dialog System (Global)
+   Digunakan untuk popup transaksi, donasi, pengajuan, dll.
+   ───────────────────────────────────────────────────────────── */
+.modal-backdrop,
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 100;
-  background-color: rgba(30, 40, 25, 0.65);
-  backdrop-filter: blur(6px);
+  z-index: 1000;
+  background-color: rgba(0, 33, 19, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
+  padding: 1.5rem 1rem;
   overflow-y: auto;
-  transition: opacity 0.3s ease;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.modal-backdrop::-webkit-scrollbar,
+.modal-overlay::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.modal-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 46, 29, 0.12);
+  border-radius: var(--radius-xl);
+  padding: 2rem 1.75rem;
+  box-shadow: 0 24px 64px -12px rgba(0, 46, 29, 0.4);
+  animation: modalScaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-dialog::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+@media (min-width: 640px) {
+  .modal-dialog {
+    padding: 2.5rem 2.25rem;
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(0, 46, 29, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.modal-header .badge {
+  margin-bottom: 0.6rem;
+}
+
+.modal-title {
+  font-family: var(--font-headline);
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  line-height: 1.15;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.modal-close-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-container);
+  color: var(--color-primary);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background-color: var(--color-surface-container-high);
+  transform: rotate(90deg);
+}
+
+.modal-summary-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-surface-container-low);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0, 46, 29, 0.06);
+  margin-bottom: 1.5rem;
+}
+
+.modal-form-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.modal-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.modal-input {
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-container-lowest);
+  border: 1px solid rgba(0, 46, 29, 0.15);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-primary);
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.modal-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-container-lowest);
+  border: 1px solid rgba(0, 46, 29, 0.15);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-primary);
+  outline: none;
+  resize: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.modal-input:focus,
+.modal-textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(1, 71, 46, 0.15);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────

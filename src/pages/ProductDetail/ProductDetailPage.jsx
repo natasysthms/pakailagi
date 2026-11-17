@@ -499,9 +499,7 @@ export default function ProductDetailPage() {
           <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <div>
-                <span className="badge badge-secondary" style={{ marginBottom: '0.25rem' }}>
-                  Transaksi Sirkular Langsung
-                </span>
+                <span className="badge badge-secondary">Transaksi Sirkular Langsung</span>
                 <h3 className="modal-title">Ajukan Pembelian Pakaian</h3>
               </div>
               <button
@@ -548,18 +546,18 @@ export default function ProductDetailPage() {
               </div>
             ) : (
               <form onSubmit={handleFormSubmit} className="modal-form-wrap">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', backgroundColor: 'var(--color-surface-container-low)', borderRadius: 'var(--radius-md)' }}>
+                <div className="modal-summary-box">
                   <img
                     src={images[0]}
                     alt=""
-                    style={{ width: '3rem', height: '3.75rem', objectFit: 'cover', borderRadius: 'var(--radius-sm)' }}
+                    style={{ width: '3.25rem', height: '4rem', objectFit: 'cover', borderRadius: 'var(--radius-sm)' }}
                   />
                   <div>
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-primary)' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-primary)' }}>
                       {product.title}
                     </div>
-                    <div style={{ fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>
-                      Rp {product.price.toLocaleString('id-ID')} • {product.sizeShort || product.size}
+                    <div style={{ fontSize: '13px', color: 'var(--color-on-surface-variant)', marginTop: '0.2rem' }}>
+                      Rp {product.price.toLocaleString('id-ID')} • Ukuran {product.sizeShort || product.size}
                     </div>
                   </div>
                 </div>
@@ -609,7 +607,7 @@ export default function ProductDetailPage() {
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  style={{ width: '100%', justifyContent: 'center' }}
+                  style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', padding: '0.9rem 1.5rem' }}
                   disabled={submitting}
                 >
                   {submitting ? 'Mengirim Pengajuan...' : 'Kirim Pengajuan Pembelian'}

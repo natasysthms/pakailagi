@@ -385,7 +385,7 @@ export default function RepairPage() {
           <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <div>
-                <span className="badge badge-secondary" style={{ marginBottom: '0.25rem' }}>Kemitraan Gratis</span>
+                <span className="badge badge-secondary">Kemitraan Gratis</span>
                 <h3 className="modal-title">Daftar Sebagai Mitra Artisan</h3>
               </div>
               <button type="button" className="modal-close-btn" onClick={() => setIsModalOpen(false)}>
@@ -409,9 +409,9 @@ export default function RepairPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleRegSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginTop: '1rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="art-bus-name" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+              <form onSubmit={handleRegSubmit} className="modal-form-wrap">
+                <div className="modal-input-group">
+                  <label htmlFor="art-bus-name" className="modal-label">
                     Nama Bengkel / Usaha Jahit
                   </label>
                   <input
@@ -425,9 +425,9 @@ export default function RepairPage() {
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                    <label htmlFor="art-own-name" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="modal-input-group">
+                    <label htmlFor="art-own-name" className="modal-label">
                       Nama Pemilik
                     </label>
                     <input
@@ -441,8 +441,8 @@ export default function RepairPage() {
                     />
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                    <label htmlFor="art-phone" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                  <div className="modal-input-group">
+                    <label htmlFor="art-phone" className="modal-label">
                       No. WhatsApp Aktif
                     </label>
                     <input
@@ -457,9 +457,9 @@ export default function RepairPage() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                    <label htmlFor="art-city" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="modal-input-group">
+                    <label htmlFor="art-city" className="modal-label">
                       Kota Domisili
                     </label>
                     <select
@@ -474,8 +474,8 @@ export default function RepairPage() {
                     </select>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                    <label htmlFor="art-spec" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                  <div className="modal-input-group">
+                    <label htmlFor="art-spec" className="modal-label">
                       Keahlian Utama
                     </label>
                     <select
@@ -492,8 +492,8 @@ export default function RepairPage() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="art-price" style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary)' }}>
+                <div className="modal-input-group">
+                  <label htmlFor="art-price" className="modal-label">
                     Kisaran Estimasi Biaya
                   </label>
                   <input
@@ -506,7 +506,12 @@ export default function RepairPage() {
                   />
                 </div>
 
-                <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={submitting}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', padding: '0.9rem 1.5rem' }}
+                  disabled={submitting}
+                >
                   {submitting ? 'Mengirim Pendaftaran...' : 'Kirim Pendaftaran Mitra'}
                 </button>
               </form>

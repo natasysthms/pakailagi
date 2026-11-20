@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { userService } from '../../services/api/userService';
 import './ProfilePage.css';
 
@@ -12,6 +12,7 @@ const ACTIVITY_FILTERS = [
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [activeMode, setActiveMode] = useState('consumer'); // 'consumer' | 'seller'
   const [activityFilter, setActivityFilter] = useState('all');
@@ -21,12 +22,16 @@ export default function ProfilePage() {
 
     async function loadProfile() {
       const data = await userService.getCurrentProfile();
+      if (!data) {
+        navigate('/masuk'); // belum login atau token kedaluwarsa
+        return;
+      }
       setProfile(data);
       setLoading(false);
     }
 
     loadProfile();
-  }, []);
+  }, [navigate]);
 
   if (loading || !profile) {
     return (

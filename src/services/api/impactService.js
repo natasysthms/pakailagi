@@ -1,55 +1,63 @@
 /**
  * impactService.js
- * Service untuk data dampak emisi PakaiLagi.
+ * Service untuk dashboard dampak & estimasi CO₂e PakaiLagi.
  *
- * ─── ENDPOINT API YANG DIBUTUHKAN (untuk backend developer) ───────────────────
- *
- *  GET    /impact/scenarios           Ambil semua skenario kalkulasi emisi
- *  GET    /impact/scenarios/:key      Ambil satu skenario berdasarkan key (standar/optimis/konservatif)
- *  GET    /impact/categories          Ambil breakdown emisi per kategori tekstil
- *  GET    /impact/emission-factors    Ambil tabel faktor emisi per jenis bahan
- *
+ * ─── ENDPOINT BACK END ──────────────────────────────────────────────────────
+ *  GET    /impact/summary             Jumlah preloved & donasi selesai, jumlah reparasi, total per skenario
+ *  GET    /impact/scenarios           Semua skenario (kunci: konservatif | standar | optimis)
+ *  GET    /impact/scenarios/:key      Satu skenario
+ *  GET    /impact/categories          Rincian emisi dihindari per kategori (skenario dasar)
+ *  GET    /impact/emission-factors    Faktor emisi per kategori + sumber
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
 import { mockImpactScenarios, mockImpactCategories, mockTextileEmissionFactors } from '../mockData/impact.js';
-// import { fetchAPI } from './apiConfig.js'; // Aktifkan saat backend siap
+import { fetchAPI, USE_MOCK } from './apiConfig.js';
+
+// Warna kategori ditentukan di front end (back end hanya mengirim data)
+const CATEGORY_COLORS = [
+  { colorClass: 'bg-primary-container', dotColor: '#01472e' },
+  { colorClass: 'bg-secondary', dotColor: '#566342' },
+  { colorClass: 'bg-on-secondary-container', dotColor: '#5a6745' },
+  { colorClass: 'bg-secondary-fixed-dim', dotColor: '#becca3' },
+];
 
 export const impactService = {
-  /**
-   * Ambil data satu skenario kalkulasi.
-   * @param {string} key - 'standar' | 'optimis' | 'konservatif'
-   * @returns {Promise<object>}
-   */
+  /** @param {string} key - 'standar' | 'optimis' | 'konservatif' */
   async getScenarioData(key = 'standar') {
+    if (USE_MOCK) return mockImpactScenarios[key] || mockImpactScenarios.standar;
     return fetchAPI(`/impact/scenarios/${key}`);
-    return Promise.resolve(mockImpactScenarios[key] || mockImpactScenarios.standar);
   },
 
-  /**
-   * Ambil semua skenario sekaligus (untuk render tab).
-   * @returns {Promise<object>} Key-value: { standar: {...}, optimis: {...}, ... }
-   */
+  /** @returns {Promise<object>} { konservatif: {...}, standar: {...}, optimis: {...} } */
   async getAllScenarios() {
+    if (USE_MOCK) return mockImpactScenarios;
     return fetchAPI('/impact/scenarios');
-    return Promise.resolve(mockImpactScenarios);
   },
 
-  /**
-   * Ambil breakdown emisi per kategori tekstil.
-   * @returns {Promise<Array>}
-   */
+  /** @returns {Promise<object>} ringkasan indikator dashboard */
+  async getSummary() {
+    if (USE_MOCK) return null;
+    return fetchAPI('/impact/summary');
+  },
+
+  /** @returns {Promise<Array>} */
   async getCategoryBreakdown() {
-    return fetchAPI('/impact/categories');
-    return Promise.resolve([...mockImpactCategories]);
+    if (USE_MOCK) return [...mockImpactCategories];
+
+    const categories = await fetchAPI('/impact/categories');
+    return categories.map((category, index) => ({ ...category, ...CATEGORY_COLORS[index % CATEGORY_COLORS.length] }));
   },
 
-  /**
-   * Ambil tabel faktor emisi CO₂ per jenis bahan.
-   * @returns {Promise<Array>}
-   */
+  /** @returns {Promise<Array>} */
   async getEmissionFactors() {
-    return fetchAPI('/impact/emission-factors');
-    return Promise.resolve([...mockTextileEmissionFactors]);
+    if (USE_MOCK) return [...mockTextileEmissionFactors];
+
+    const factors = await fetchAPI('/impact/emission-factors');
+    return factors.map((factor) => ({
+      ...factor,
+      ef: `${factor.ef} ${factor.unit}${factor.isProxy ? ' (proksi)' : ''}`,
+      water: factor.source, // kolom ketiga menampilkan sumber literatur
+    }));
   },
 };

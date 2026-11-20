@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import GarmentCard from '../../components/common/GarmentCard';
 import { productService } from '../../services/api/productService';
 import './ProductDetailPage.css';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,8 +67,15 @@ export default function ProductDetailPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    await productService.submitPurchaseRequest(product.id, formData);
+    const res = await productService.submitPurchaseRequest(product.id, formData);
     setSubmitting(false);
+
+    if (!res.success) {
+      window.alert(res.message);
+      if (res.needLogin) navigate('/masuk');
+      return;
+    }
+
     setFormSubmitted(true);
   };
 
@@ -150,10 +158,12 @@ export default function ProductDetailPage() {
                   <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>eco</span>
                   -{product.avoidedCo2} kg CO₂e
                 </span>
-                <span className="gallery-impact-pill">
-                  <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>water_drop</span>
-                  -{product.conservedWater.toLocaleString('id-ID')} L Air
-                </span>
+                {product.conservedWater != null && (
+                  <span className="gallery-impact-pill">
+                    <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>water_drop</span>
+                    -{product.conservedWater.toLocaleString('id-ID')} L Air
+                  </span>
+                )}
               </div>
             </div>
 
@@ -230,10 +240,12 @@ export default function ProductDetailPage() {
                   <div className="impact-val-num">{product.avoidedCo2} KG</div>
                   <div className="impact-val-sub">Emisi CO₂e Tercegah</div>
                 </div>
-                <div>
-                  <div className="impact-val-num">{product.conservedWater.toLocaleString('id-ID')} L</div>
-                  <div className="impact-val-sub">Cadangan Air Tanah Terjaga</div>
-                </div>
+                {product.conservedWater != null && (
+                  <div>
+                    <div className="impact-val-num">{product.conservedWater.toLocaleString('id-ID')} L</div>
+                    <div className="impact-val-sub">Cadangan Air Tanah Terjaga</div>
+                  </div>
+                )}
               </div>
               <p style={{ fontSize: '11px', color: 'rgba(254, 250, 224, 0.75)', lineHeight: '16px', margin: 0 }}>
                 *Dihitung berdasarkan koefisien substitusi garmen serat alami terkurasi pengganti manufaktur pakaian baru.

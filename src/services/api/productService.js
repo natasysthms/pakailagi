@@ -2,72 +2,73 @@
  * productService.js
  * Service untuk data produk preloved PakaiLagi.
  *
- * ─── ENDPOINT API YANG DIBUTUHKAN (untuk backend developer) ───────────────────
- *
- *  GET    /products                  Ambil semua produk (support query: ?category=&size=&sort=)
- *  GET    /products/featured         Ambil produk yang ditampilkan di homepage (maks 4)
- *  GET    /products/:id              Ambil detail satu produk berdasarkan ID atau slug
- *  POST   /products/:id/purchase     Kirim pengajuan pembelian (body: { buyerName, buyerEmail, message })
- *
- * ─────────────────────────────────────────────────────────────────────────────
- * CATATAN: Saat ini semua fungsi menggunakan mock data lokal.
- * Untuk connect ke backend nyata:
- * 1. Set VITE_USE_MOCK=false di file .env.local
- * 2. Ganti implementasi di bawah dengan pemanggilan fetchAPI
- * 3. Contoh: return fetchAPI('/products');
+ * ─── ENDPOINT BACK END ──────────────────────────────────────────────────────
+ *  GET    /products                  Katalog (query: category, size, condition, min_price, max_price, q, page)
+ *  GET    /products/featured         Produk unggulan beranda (maks 4)
+ *  GET    /products/:id              Detail (id atau slug)
+ *  POST   /products/:id/purchase     Ajukan pembelian (WAJIB LOGIN), body: { notes }
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
 import { mockProducts } from '../mockData/products.js';
-import { fetchAPI } from './apiConfig.js'; // Aktifkan saat backend siap
+import { fetchAPI, submitAPI, USE_MOCK } from './apiConfig.js';
 
 export const productService = {
   /**
    * Ambil semua produk. Mendukung filter opsional.
-   * @param {{ category?: string, size?: string, sort?: string }} filters
+   * @param {{ category?: string, size?: string, q?: string, page?: number }} filters
    * @returns {Promise<Array>}
    */
   async getAllProducts(filters = {}) {
-    return fetchAPI(`/products?${new URLSearchParams(filters)}`);
-    let results = [...mockProducts];
-    if (filters.category) results = results.filter((p) => p.category === filters.category);
-    if (filters.size) results = results.filter((p) => p.size === filters.size);
-    return Promise.resolve(results);
+    if (USE_MOCK) {
+      let results = [...mockProducts];
+      if (filters.category) results = results.filter((p) => p.category === filters.category);
+      if (filters.size) results = results.filter((p) => p.size === filters.size);
+      return results;
+    }
+
+    const query = new URLSearchParams(Object.entries(filters).filter(([, v]) => v !== undefined && v !== ''));
+    return fetchAPI(`/products${query.toString() ? `?${query}` : ''}`);
   },
 
-  /**
-   * Ambil produk unggulan untuk homepage.
-   * @returns {Promise<Array>}
-   */
+  /** @returns {Promise<Array>} */
   async getFeaturedProducts() {
+    if (USE_MOCK) return mockProducts.filter((p) => p.featured).slice(0, 4);
     return fetchAPI('/products/featured');
-    return Promise.resolve(mockProducts.filter((p) => p.featured).slice(0, 4));
   },
 
   /**
-   * Ambil detail satu produk berdasarkan ID atau slug.
-   * @param {string} id
+   * Ambil detail satu produk berdasarkan ID atau slug. Mengembalikan null jika tidak ditemukan.
+   * @param {string|number} id
    * @returns {Promise<object|null>}
    */
   async getProductById(id) {
-    return fetchAPI(`/products/${id}`);
-    const product = mockProducts.find((p) => p.id === id || p.slug === id);
-    return Promise.resolve(product || null);
+    if (USE_MOCK) return mockProducts.find((p) => p.id === id || p.slug === id) || null;
+
+    try {
+      return await fetchAPI(`/products/${encodeURIComponent(id)}`);
+    } catch {
+      return null;
+    }
   },
 
   /**
-   * Kirim pengajuan pembelian produk.
-   * @param {string} productId
-   * @param {{ buyerName: string, buyerEmail: string, message: string }} requestData
-   * @returns {Promise<{ success: boolean, message: string }>}
+   * Kirim pengajuan pembelian. Pembeli diambil dari token login.
+   * @param {string|number} productId
+   * @param {{ name?: string, phone?: string, notes?: string }} requestData
+   * @returns {Promise<{ success: boolean, message: string, needLogin?: boolean }>}
    */
   async submitPurchaseRequest(productId, requestData) {
-    return fetchAPI(`/products/${productId}/purchase`, { method: 'POST', body: JSON.stringify(requestData) });
-    console.log(`[ProductService] Purchase request for ${productId}:`, requestData);
-    return Promise.resolve({
-      success: true,
-      message: 'Pengajuan pembelian berhasil dikirim ke kurator.',
-      data: { productId, ...requestData, timestamp: new Date().toISOString() },
-    });
+    if (USE_MOCK) {
+      return { success: true, message: 'Pengajuan pembelian berhasil dikirim ke kurator.' };
+    }
+
+    const notes = [requestData.notes, requestData.phone ? `Kontak: ${requestData.phone}` : null]
+      .filter(Boolean)
+      .join('\n');
+
+    return submitAPI(() =>
+      fetchAPI(`/products/${productId}/purchase`, { method: 'POST', body: JSON.stringify({ notes }) })
+    );
   },
 };

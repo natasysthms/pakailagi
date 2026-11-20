@@ -1,110 +1,119 @@
 /**
  * apiConfig.js
- * Konfigurasi pusat untuk komunikasi REST API PakaiLagi.
+ * Konfigurasi pusat untuk komunikasi REST API PakaiLagi (back end Laravel).
  *
- * Ketika backend sudah siap, ganti BASE_URL dengan URL server yang sesungguhnya.
- * Semua service di src/services/api/ menggunakan fungsi fetchAPI dari sini.
+ * Cara memakai back end (bukan mock):
+ *   Buat file .env.local di root project front end, isi:
+ *     VITE_API_BASE_URL=http://localhost:8000/api/v1
+ *     VITE_USE_MOCK=false
+ *   Lalu jalankan ulang `npm run dev`.
+ *
+ * Jika VITE_USE_MOCK tidak diisi / bernilai selain 'false', semua service tetap memakai mock data,
+ * sehingga front end masih bisa dikembangkan tanpa back end.
  */
 
-// ─────────────────────────────────────────────────────────────────────────────
-// KONFIGURASI BASE URL
-// ─────────────────────────────────────────────────────────────────────────────
-
-/**
- * Gunakan environment variable VITE_API_BASE_URL jika tersedia.
- * Untuk development lokal, buat file .env.local di root project dan isi:
- *   VITE_API_BASE_URL=http://localhost:8000/api/v1
- *
- * Untuk production, set environment variable ini di server hosting.
- */
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
 
-// Apakah aplikasi sedang dalam mode mock (backend belum tersedia)?
-// const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false';
+// Mode mock aktif kecuali VITE_USE_MOCK=false
+const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// HELPER FETCH WRAPPER
-// ─────────────────────────────────────────────────────────────────────────────
+const TOKEN_KEY = 'pakailagi_token';
 
 /**
- * fetchAPI — wrapper di atas browser fetch() dengan:
+ * Error API yang membawa status HTTP (401, 403, 422, dst.) dan pesan dari back end.
+ */
+class ApiError extends Error {
+  constructor(message, status, errors = null) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.errors = errors;
+  }
+}
+
+/**
+ * fetchAPI — wrapper di atas fetch() dengan:
  * - Base URL otomatis
- * - JSON Content-Type default
- * - Authorization header dari localStorage
- * - Error handling terpusat
+ * - Header JSON (kecuali body berupa FormData untuk upload foto)
+ * - Authorization: Bearer <token> jika sudah login
+ * - Error terpusat: melempar ApiError berisi pesan dari Laravel
  *
  * @param {string} endpoint  - Path relatif, contoh: '/products'
- * @param {object} options   - Opsi fetch standar (method, body, headers, dll.)
- * @returns {Promise<any>}   - Data JSON dari response
+ * @param {object} options   - Opsi fetch (method, body, headers, dll.)
+ * @returns {Promise<any>}   - Data JSON dari response (null untuk 204)
  */
 async function fetchAPI(endpoint, options = {}) {
-  const url = `${BASE_URL}${endpoint}`;
+  const token = getToken();
+  const isFormData = options.body instanceof FormData;
 
-  const token = localStorage.getItem('pakailagi_token');
-
-  const defaultHeaders = {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-
-  const config = {
+  const response = await fetch(`${BASE_URL}${endpoint}`, {
     ...options,
     headers: {
-      ...defaultHeaders,
+      Accept: 'application/json',
+      // Untuk FormData, browser mengisi Content-Type + boundary sendiri
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
-  };
+  });
 
-  const response = await fetch(url, config);
-
-  if (!response.ok) {
-    // Coba baca pesan error dari body JSON (jika ada)
-    let errorMessage = `HTTP Error ${response.status}`;
-    try {
-      const errorBody = await response.json();
-      errorMessage = errorBody.message || errorBody.detail || errorMessage;
-    } catch {
-      // Response bukan JSON, gunakan status text
-      errorMessage = response.statusText || errorMessage;
-    }
-    throw new Error(errorMessage);
-  }
-
-  // Jika response 204 No Content, kembalikan null
   if (response.status === 204) return null;
 
-  return response.json();
+  let body = null;
+  try {
+    body = await response.json();
+  } catch {
+    // respons bukan JSON
+  }
+
+  if (!response.ok) {
+    if (response.status === 401) clearToken(); // token kedaluwarsa / tidak valid
+
+    // Laravel 422: { message, errors: { field: [pesan] } } → ambil pesan pertama yang paling jelas
+    const firstFieldError = body?.errors ? Object.values(body.errors)[0]?.[0] : null;
+    const message = firstFieldError || body?.message || `HTTP Error ${response.status}`;
+    throw new ApiError(message, response.status, body?.errors ?? null);
+  }
+
+  return body;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AUTH HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
-
 /**
- * Simpan token ke localStorage setelah login berhasil.
- * @param {string} token
+ * Untuk aksi kirim form: tidak melempar error, tetapi mengembalikan
+ * { success: false, message } agar halaman tetap bisa menampilkan pesan.
+ * @param {() => Promise<any>} request
  */
+async function submitAPI(request) {
+  try {
+    const result = await request();
+    return { success: true, ...result };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error.status === 401
+          ? 'Silakan masuk (login) terlebih dahulu untuk melanjutkan.'
+          : error.message || 'Terjadi kesalahan. Silakan coba lagi.',
+      needLogin: error.status === 401,
+      errors: error.errors ?? null,
+    };
+  }
+}
+
 function saveToken(token) {
-  localStorage.setItem('pakailagi_token', token);
+  localStorage.setItem(TOKEN_KEY, token);
 }
 
-/**
- * Hapus token dari localStorage saat logout.
- */
 function clearToken() {
-  localStorage.removeItem('pakailagi_token');
+  localStorage.removeItem(TOKEN_KEY);
 }
 
-/**
- * Ambil token yang tersimpan (untuk pengecekan status login).
- * @returns {string|null}
- */
 function getToken() {
-  return localStorage.getItem('pakailagi_token');
+  return localStorage.getItem(TOKEN_KEY);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// EKSPOR
-// ─────────────────────────────────────────────────────────────────────────────
+function isLoggedIn() {
+  return Boolean(getToken());
+}
 
-export { fetchAPI, saveToken, clearToken, getToken, BASE_URL, USE_MOCK };
+export { fetchAPI, submitAPI, ApiError, saveToken, clearToken, getToken, isLoggedIn, BASE_URL, USE_MOCK };

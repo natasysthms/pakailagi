@@ -1,43 +1,64 @@
 /**
  * artisanService.js
- * Service untuk data artisan reparasi PakaiLagi.
+ * Service untuk direktori layanan reparasi (artisan) PakaiLagi.
  *
- * ─── ENDPOINT API YANG DIBUTUHKAN (untuk backend developer) ───────────────────
- *
- *  GET    /artisans                  Ambil semua artisan (support query: ?city=&specialty=)
- *  GET    /artisans/:id              Ambil detail satu artisan berdasarkan ID
- *  POST   /artisans/register         Daftarkan artisan baru (body: { name, city, specialty, ... })
- *
+ * ─── ENDPOINT BACK END ──────────────────────────────────────────────────────
+ *  GET    /artisans                  Semua artisan terverifikasi (query: city, specialty, q)
+ *  GET    /artisans/:id              Detail artisan
+ *  POST   /artisans/register         Daftarkan artisan baru (menunggu verifikasi admin)
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
 import { mockArtisans } from '../mockData/artisans.js';
-import { fetchAPI } from './apiConfig.js'; // Aktifkan saat backend siap
+import { fetchAPI, submitAPI, USE_MOCK } from './apiConfig.js';
+
+/** Label pilihan keahlian di form → kode keahlian yang dipakai filter */
+const SPECIALTY_CODES = {
+  'Sashiko & Darning': ['sashiko'],
+  'Denim & Chainstitch': ['denim'],
+  'Permak & Alterasi': ['alterasi'],
+  'Pewarnaan Alami': ['pewarnaan'],
+};
 
 export const artisanService = {
   /**
-   * Ambil semua artisan. Mendukung filter opsional.
-   * @param {{ city?: string, specialty?: string }} filters
+   * @param {{ city?: string, specialty?: string, q?: string }} filters
    * @returns {Promise<Array>}
    */
-  async getAllArtisans() {
-    return fetchAPI(`/artisans?${new URLSearchParams(filters)}`);
-    // filters parameter: { city?: string, specialty?: string }
-    return Promise.resolve([...mockArtisans]);
+  async getAllArtisans(filters = {}) {
+    if (USE_MOCK) return [...mockArtisans];
+
+    const query = new URLSearchParams(Object.entries(filters).filter(([, v]) => v));
+    return fetchAPI(`/artisans${query.toString() ? `?${query}` : ''}`);
   },
 
   /**
-   * Daftarkan artisan baru ke direktori reparasi.
-   * @param {{ name: string, city: string, specialties: string[], phone: string, bio: string }} artisanData
-   * @returns {Promise<{ success: boolean, message: string }>}
+   * @param {{ businessName: string, ownerName?: string, phone: string, city: string, specialties: string, priceEstimate?: string }} form
    */
-  async registerArtisan(artisanData) {
-    return fetchAPI('/artisans/register', { method: 'POST', body: JSON.stringify(artisanData) });
-    console.log('[ArtisanService] Register new artisan:', artisanData);
-    return Promise.resolve({
-      success: true,
-      message: 'Pendaftaran artisan berhasil dikirim. Tim kurator PakaiLagi akan menghubungi dalam 24 jam.',
-      data: artisanData,
-    });
+  async registerArtisan(form) {
+    if (USE_MOCK) {
+      return { success: true, message: 'Pendaftaran artisan berhasil dikirim.' };
+    }
+
+    const bio = [
+      form.ownerName ? `Pemilik: ${form.ownerName}` : null,
+      form.priceEstimate ? `Estimasi biaya: ${form.priceEstimate}` : null,
+    ]
+      .filter(Boolean)
+      .join('. ');
+
+    return submitAPI(() =>
+      fetchAPI('/artisans/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: form.businessName,
+          city: form.city,
+          phone: form.phone,
+          specialties: SPECIALTY_CODES[form.specialties] || [],
+          specialtyLabel: form.specialties,
+          bio: bio || null,
+        }),
+      })
+    );
   },
 };

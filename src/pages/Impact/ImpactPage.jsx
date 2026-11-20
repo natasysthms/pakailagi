@@ -116,7 +116,7 @@ export default function ImpactPage() {
                 <div style={{ marginTop: '0.75rem', padding: '0.65rem', backgroundColor: 'rgba(0,46,29,0.5)', borderRadius: 'var(--radius-sm)', fontSize: '12px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--color-secondary-fixed)' }}>
                     <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>directions_car</span>
-                    <span>{currentScenario.equiv}</span>
+                    <span>{currentScenario.equiv || 'Estimasi potensi, bukan pengukuran langsung'}</span>
                   </div>
                 </div>
               </div>
@@ -184,9 +184,11 @@ export default function ImpactPage() {
                   {currentScenario.metricTotal} CO₂e
                 </div>
               </div>
-              <div style={{ borderTop: '1px solid rgba(0,46,29,0.1)', paddingTop: '0.5rem', fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>
-                🌳 Serapan Ekivalen: <strong>{currentScenario.trees}</strong>
-              </div>
+              {currentScenario.trees && (
+                <div style={{ borderTop: '1px solid rgba(0,46,29,0.1)', paddingTop: '0.5rem', fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>
+                  🌳 Serapan Ekivalen: <strong>{currentScenario.trees}</strong>
+                </div>
+              )}
             </div>
           </div>
         </div>

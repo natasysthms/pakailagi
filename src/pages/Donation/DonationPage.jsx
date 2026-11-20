@@ -22,6 +22,7 @@ export default function DonationPage() {
     name: '',
     phone: '',
     quantity: '5',
+    category: 'Pakaian Dewasa', // dipakai perhitungan CO₂e
     method: 'dropbox' // 'dropbox' | 'courier'
   });
 
@@ -197,11 +198,11 @@ export default function DonationPage() {
           ) : (
             <div className="org-needs-grid">
               {filteredNeeds.map((org) => {
-                const percent = Math.min(100, Math.round((org.collected / org.target) * 100));
+                const percent = org.target ? Math.min(100, Math.round((org.collected / org.target) * 100)) : 0;
                 return (
                   <div key={org.id} className="org-card">
                     <div className="org-card-img-wrap">
-                      <img src={org.image} alt={org.orgName} className="org-card-img" loading="lazy" />
+                      {org.image && <img src={org.image} alt={org.orgName} className="org-card-img" loading="lazy" />}
                       <span className={`org-badge-urgency ${org.urgency.toLowerCase()}`}>
                         {org.urgency}
                       </span>
@@ -219,7 +220,7 @@ export default function DonationPage() {
                       <div className="org-progress-wrap">
                         <div className="org-progress-labels">
                           <span>Terkumpul {org.collected} Pcs</span>
-                          <span>Target {org.target} Pcs ({percent}%)</span>
+                          {org.target ? <span>Target {org.target} Pcs ({percent}%)</span> : <span>Donasi tersalurkan</span>}
                         </div>
                         <div className="org-progress-track">
                           <div className="org-progress-bar" style={{ width: `${percent}%` }} />
@@ -462,6 +463,23 @@ export default function DonationPage() {
                     value={donateFormData.quantity}
                     onChange={(e) => setDonateFormData({ ...donateFormData, quantity: e.target.value })}
                   />
+                </div>
+
+                <div className="modal-input-group">
+                  <label htmlFor="don-category" className="modal-label">
+                    Kategori Pakaian
+                  </label>
+                  <select
+                    id="don-category"
+                    className="modal-input"
+                    value={donateFormData.category}
+                    onChange={(e) => setDonateFormData({ ...donateFormData, category: e.target.value })}
+                  >
+                    <option value="Pakaian Dewasa">Pakaian Dewasa</option>
+                    <option value="Pakaian Anak">Pakaian Anak</option>
+                    <option value="Seragam Sekolah">Seragam Sekolah</option>
+                    <option value="Pakaian Hangat">Pakaian Hangat</option>
+                  </select>
                 </div>
 
                 <div className="modal-input-group">

@@ -247,11 +247,13 @@ export default function RepairPage() {
               {filteredArtisans.map((artisan) => (
                 <div key={artisan.id} className="artisan-card">
                   <div className="artisan-card-img-wrap">
-                    <img src={artisan.image} alt={artisan.name} className="artisan-card-img" loading="lazy" />
-                    <span className="artisan-rating-pill">
-                      <span className="material-symbols-outlined" style={{ fontSize: '14px', color: '#e6a100' }}>star</span>
-                      <span>{artisan.rating}</span>
-                    </span>
+                    {artisan.image && <img src={artisan.image} alt={artisan.name} className="artisan-card-img" loading="lazy" />}
+                    {artisan.rating != null && (
+                      <span className="artisan-rating-pill">
+                        <span className="material-symbols-outlined" style={{ fontSize: '14px', color: '#e6a100' }}>star</span>
+                        <span>{artisan.rating}</span>
+                      </span>
+                    )}
                     <button
                       type="button"
                       className={`artisan-bookmark-btn ${bookmarks[artisan.id] ? 'saved' : ''}`}

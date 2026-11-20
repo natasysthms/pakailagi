@@ -2,83 +2,87 @@
  * userService.js
  * Service untuk autentikasi dan profil pengguna PakaiLagi.
  *
- * ─── ENDPOINT API YANG DIBUTUHKAN (untuk backend developer) ───────────────────
- *
- *  POST   /auth/login               Login dengan email + password → { token, user }
- *  POST   /auth/register            Daftar akun baru → { token, user }
- *  POST   /auth/logout              Logout (invalidate token di server)
- *  GET    /auth/me                  Ambil profil user yang sedang login (dari Bearer token)
- *
- *  GET    /users/:id                Ambil profil pengguna berdasarkan ID
- *  PUT    /users/:id                Update profil pengguna
- *  GET    /users/:id/activity       Ambil riwayat aktivitas (preloved, donasi, reparasi)
- *  GET    /users/:id/inventory      Ambil inventaris pakaian penjual
- *  GET    /users/:id/seller-queue   Ambil antrian permintaan menjadi penjual
- *
+ * ─── ENDPOINT BACK END ──────────────────────────────────────────────────────
+ *  POST   /auth/login               { email, password } → { token, user }
+ *  POST   /auth/register            { name, email, password, role } → { token, user }
+ *  POST   /auth/logout              Hapus token di server
+ *  GET    /auth/me                  Profil lengkap pengguna yang login
+ *  PUT    /users/me                 Ubah profil
+ *  GET    /users/me/activity        Riwayat aktivitas
+ *  GET    /users/me/inventory       Pakaian yang ditawarkan
+ *  GET    /users/me/seller-queue    Permintaan masuk
  * ─────────────────────────────────────────────────────────────────────────────
- * CATATAN INTEGRASI:
- * - Setelah login berhasil, simpan token dengan saveToken() dari apiConfig.js
- * - fetchAPI() otomatis menyertakan token di header Authorization: Bearer <token>
- * - Saat logout, panggil clearToken() dari apiConfig.js
- * ─────────────────────────────────────────────────────────────────────────────
+ * Token disimpan di localStorage oleh saveToken() dan otomatis dikirim fetchAPI().
  */
 
 import { mockUserProfile } from '../mockData/profile.js';
-import { fetchAPI, saveToken, clearToken } from './apiConfig.js'; // Aktifkan saat backend siap
+import { fetchAPI, saveToken, clearToken, isLoggedIn, USE_MOCK } from './apiConfig.js';
 
 export const userService = {
   /**
-   * Ambil profil user yang sedang login.
-   * @returns {Promise<object>}
+   * Profil pengguna yang sedang login. Mengembalikan null jika belum login.
+   * @returns {Promise<object|null>}
    */
   async getCurrentProfile() {
-    return fetchAPI('/auth/me');
-    return Promise.resolve({ ...mockUserProfile });
+    if (USE_MOCK) return { ...mockUserProfile };
+    if (!isLoggedIn()) return null;
+
+    try {
+      return await fetchAPI('/auth/me');
+    } catch {
+      return null;
+    }
   },
 
   /**
-   * Login pengguna.
+   * Login. Melempar error jika gagal (halaman Auth sudah menangkapnya).
    * @param {{ email: string, password: string }} credentials
-   * @returns {Promise<{ success: boolean, message: string, user: object }>}
    */
   async login(credentials) {
-    const result = await fetchAPI('/auth/login', { method: 'POST', body: JSON.stringify(credentials) });
+    if (USE_MOCK) {
+      return { success: true, message: `Selamat datang kembali, ${mockUserProfile.name}.`, user: { email: credentials.email } };
+    }
+
+    const result = await fetchAPI('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email: credentials.email, password: credentials.password }),
+    });
     saveToken(result.token);
     return result;
-    console.log('[UserService] Login attempt:', credentials);
-    return Promise.resolve({
-      success: true,
-      message: `Selamat datang kembali, akun ${credentials.email} berhasil diautentikasi.`,
-      user: { email: credentials.email, name: mockUserProfile.name },
-    });
   },
 
   /**
-   * Daftar akun baru.
-   * @param {{ name: string, email: string, password: string, role: 'consumer'|'seller' }} registrationData
-   * @returns {Promise<{ success: boolean, message: string, user: object }>}
+   * Daftar akun baru. Melempar error jika gagal.
+   * @param {{ fullName: string, email: string, password: string, role: 'consumer'|'seller' }} data
    */
-  async register(registrationData) {
-    const result = await fetchAPI('/auth/register', { method: 'POST', body: JSON.stringify(registrationData) });
+  async register(data) {
+    if (USE_MOCK) {
+      return { success: true, message: 'Akun berhasil didaftarkan!', user: data };
+    }
+
+    const result = await fetchAPI('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: data.fullName ?? data.name,
+        email: data.email,
+        password: data.password,
+        role: data.role,
+      }),
+    });
     saveToken(result.token);
     return result;
-    console.log('[UserService] Register attempt:', registrationData);
-    const roleLabel = registrationData.role === 'consumer' ? 'Konsumen & Donatur' : 'Penjual / Thrift Shop';
-    return Promise.resolve({
-      success: true,
-      message: `Akun sirkular (${roleLabel}) berhasil didaftarkan! Menyiapkan profil...`,
-      user: registrationData,
-    });
   },
 
-  /**
-   * Logout pengguna.
-   * @returns {Promise<void>}
-   */
   async logout() {
-    await fetchAPI('/auth/logout', { method: 'POST' });
+    if (!USE_MOCK && isLoggedIn()) {
+      try {
+        await fetchAPI('/auth/logout', { method: 'POST' });
+      } catch {
+        // tetap hapus token lokal walaupun request gagal
+      }
+    }
     clearToken();
-    console.log('[UserService] Logout');
-    return Promise.resolve();
   },
+
+  isLoggedIn,
 };

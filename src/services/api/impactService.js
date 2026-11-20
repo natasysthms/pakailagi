@@ -23,41 +23,41 @@ const CATEGORY_COLORS = [
 ];
 
 export const impactService = {
-  /** @param {string} key - 'standar' | 'optimis' | 'konservatif' */
-  async getScenarioData(key = 'standar') {
-    if (USE_MOCK) return mockImpactScenarios[key] || mockImpactScenarios.standar;
-    return fetchAPI(`/impact/scenarios/${key}`);
-  },
+    /** @param {string} key - 'standar' | 'optimis' | 'konservatif' */
+    async getScenarioData(key = 'standar') {
+      if (USE_MOCK) return mockImpactScenarios[key] || mockImpactScenarios.standar;
+      return fetchAPI(`/impact/scenarios/${key}`);
+    },
 
-  /** @returns {Promise<object>} { konservatif: {...}, standar: {...}, optimis: {...} } */
-  async getAllScenarios() {
-    if (USE_MOCK) return mockImpactScenarios;
-    return fetchAPI('/impact/scenarios');
-  },
+    /** @returns {Promise<object>} { konservatif: {...}, standar: {...}, optimis: {...} } */
+    async getAllScenarios() {
+      if (USE_MOCK) return mockImpactScenarios;
+      return fetchAPI('/impact/scenarios');
+    },
 
-  /** @returns {Promise<object>} ringkasan indikator dashboard */
-  async getSummary() {
-    if (USE_MOCK) return null;
-    return fetchAPI('/impact/summary');
-  },
+    /** @returns {Promise<object>} ringkasan indikator dashboard */
+    async getSummary() {
+      if (USE_MOCK) return { prelovedCompleted: 3420, donationCompleted: 1180, repairsCount: 620, avoidedKg: { standar: 14820 } };
+      return fetchAPI('/impact/summary');
+    },
 
-  /** @returns {Promise<Array>} */
-  async getCategoryBreakdown() {
-    if (USE_MOCK) return [...mockImpactCategories];
+    /** @returns {Promise<Array>} */
+    async getCategoryBreakdown() {
+      if (USE_MOCK) return [...mockImpactCategories];
 
-    const categories = await fetchAPI('/impact/categories');
-    return categories.map((category, index) => ({ ...category, ...CATEGORY_COLORS[index % CATEGORY_COLORS.length] }));
-  },
+      const categories = await fetchAPI('/impact/categories');
+      return categories.map((category, index) => ({ ...category, ...CATEGORY_COLORS[index % CATEGORY_COLORS.length] }));
+    },
 
-  /** @returns {Promise<Array>} */
-  async getEmissionFactors() {
-    if (USE_MOCK) return [...mockTextileEmissionFactors];
+    /** @returns {Promise<Array>} */
+    async getEmissionFactors() {
+      if (USE_MOCK) return [...mockTextileEmissionFactors];
 
-    const factors = await fetchAPI('/impact/emission-factors');
-    return factors.map((factor) => ({
-      ...factor,
-      ef: `${factor.ef} ${factor.unit}${factor.isProxy ? ' (proksi)' : ''}`,
-      water: factor.source, // kolom ketiga menampilkan sumber literatur
-    }));
-  },
+      const factors = await fetchAPI('/impact/emission-factors');
+      return factors.map((factor) => ({
+        ...factor,
+        ef: `${factor.ef} ${factor.unit}${factor.isProxy ? ' (proksi)' : ''}`,
+        water: factor.source, // kolom ketiga menampilkan sumber literatur
+      }));
+    },
 };

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             CareGuideSeeder::class,
             RepairServiceSeeder::class,
             CalculationParameterSeeder::class,
+            RepairRecordSeeder::class,
         ]);
     }
 }

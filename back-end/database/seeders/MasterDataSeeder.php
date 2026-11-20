@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\FabricType;
 use App\Models\GarmentCategory;
+use App\Models\Specialty;
 use Illuminate\Database\Seeder;
 
 class MasterDataSeeder extends Seeder
@@ -31,6 +32,18 @@ class MasterDataSeeder extends Seeder
             'Poliester & Sintetis',
         ] as $name) {
             FabricType::create(['name' => $name]);
+        }
+
+        // Keahlian reparasi (kode sama dengan filter di halaman Reparasi front end)
+        foreach ([
+            'sashiko' => 'Sashiko & Darning',
+            'denim' => 'Denim & Chainstitch',
+            'alterasi' => 'Permak & Alterasi',
+            'pewarnaan' => 'Pewarnaan Alami',
+            'kulit' => 'Restorasi Kulit',
+            'tas-sepatu' => 'Tas & Sepatu',
+        ] as $code => $name) {
+            Specialty::create(['code' => $code, 'name' => $name]);
         }
     }
 }

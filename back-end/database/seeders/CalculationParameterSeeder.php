@@ -16,12 +16,12 @@ class CalculationParameterSeeder extends Seeder
         // Donasi: PRD menyebut "diisi tim" sebagai asumsi penelitian. Nilai 0 di bawah adalah PLACEHOLDER,
         //         ganti dengan nilai yang sudah disepakati tim beserta sumbernya. Jangan dikarang.
         $scenarios = [
-            ['preloved', 'konservatif', 0.4000, 'Vinted (2023) dalam WRAP (2025)'],
-            ['preloved', 'dasar', 0.6460, 'Rata-rata resale peer-to-peer Inggris, WRAP (2025)'],
-            ['preloved', 'optimis', 0.8000, 'Vestiaire Collective (2023) dalam WRAP (2025)'],
-            ['donasi', 'konservatif', 0, 'BELUM DIISI - asumsi tim'],
-            ['donasi', 'dasar', 0, 'BELUM DIISI - asumsi tim'],
-            ['donasi', 'optimis', 0, 'BELUM DIISI - asumsi tim'],
+            ['preloved', 'konservatif', 0.400, 'Vinted (2023) dalam WRAP (2025)'],
+            ['preloved', 'dasar', 0.646, 'Rata-rata resale peer-to-peer Inggris, WRAP (2025)'],
+            ['preloved', 'optimis', 0.800, 'Vestiaire Collective (2023) dalam WRAP (2025)'],
+            ['donasi', 'konservatif', 0.100, 'Asumsi penelitian, mengacu pada penjelasan WRAP (2025)'],
+            ['donasi', 'dasar', 0.200, 'Asumsi penelitian, mengacu pada penjelasan WRAP (2025)'],
+            ['donasi', 'optimis', 0.300, 'Asumsi penelitian, mengacu pada penjelasan WRAP (2025)'],
         ];
 
         foreach ($scenarios as [$pathway, $scenario, $rate, $source]) {
@@ -33,16 +33,22 @@ class CalculationParameterSeeder extends Seeder
             ]);
         }
 
-        // ── Faktor emisi produksi pakaian baru (P), kg CO2e per potong ──
-        // PRD: "Diisi tim" dari literatur LCA dengan batas sistem yang SAMA untuk semua kategori.
-        // Nilai 0 adalah PLACEHOLDER. Isi lewat fitur admin (FR-F1) atau ubah di sini sebelum demo.
-        foreach (GarmentCategory::all() as $category) {
+        $factors = [
+            // kode kategori => [nilai, batas sistem, sumber, proksi?]
+            'ATASAN'     => [3.08, 'cradle-to-gate', 'Makov dan Vivanco (2025)', false],
+            'CELANA_ROK' => [10.47, 'cradle-to-gate', 'Makov dan Vivanco (2025)', false],
+            'DENIM'      => [10.47, 'cradle-to-gate', 'Makov dan Vivanco (2025)', true],
+            'OUTERWEAR'  => [15.51, 'cradle-to-gate', 'Makov dan Vivanco (2025)', false],
+            'ANAK'       => [3.08, 'cradle-to-gate', 'Makov dan Vivanco (2025)', true],  // true jika memakai nilai kategori lain
+        ];
+        
+        foreach ($factors as $code => [$value, $boundary, $source, $isProxy]) {
             EmissionFactor::create([
-                'garment_category_id' => $category->id,
-                'kg_co2e_per_item' => 0,
-                'system_boundary' => 'cradle-to-gate',
-                'source_ref' => 'BELUM DIISI - literatur LCA',
-                'is_proxy' => false,
+                'garment_category_id' => GarmentCategory::where('code', $code)->value('id'),
+                'kg_co2e_per_item' => $value,
+                'system_boundary' => $boundary,
+                'source_ref' => $source,
+                'is_proxy' => $isProxy,
             ]);
         }
     }

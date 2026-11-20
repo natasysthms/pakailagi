@@ -2,16 +2,26 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import GarmentCard from '../../components/common/GarmentCard.jsx';
 import { productService } from '../../services/api/productService.js';
+import { impactService } from '../../services/api/impactService.js';
 import './HomePage.css';
 
 export default function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [summary, setSummary] = useState(null);
 
   useEffect(() => {
+    // Angka dampak dari GET /impact/summary
+    impactService.getSummary().then(setSummary).catch(() => setSummary(null));
+
     productService.getFeaturedProducts().then((data) => {
       setFeaturedProducts(data);
     });
   }, []);
+
+  const formatCount = (value) => (value == null ? '–' : Number(value).toLocaleString('id-ID'));
+  const avoidedKg = summary?.avoidedKg?.standar;
+  const formatKg = (value) =>
+    value == null ? '–' : Number(value).toLocaleString('id-ID', { maximumFractionDigits: 0 });
 
   return (
     <div className="home-root">
@@ -341,16 +351,16 @@ export default function HomePage() {
           <div className="impact-numbers-grid">
             <div className="impact-stat-card">
               <div>
-                <span className="stat-number-giant">14.820 KG</span>
+                <span className="stat-number-giant">{formatKg(avoidedKg)} KG</span>
                 <div className="stat-divider-line"></div>
                 <p className="stat-label-title">Potensi CO₂e Dihindari</p>
               </div>
-              <p className="stat-sub-note">Setara dengan emisi berkendara roda empat sejauh ~62.000 KM.</p>
+              <p className="stat-sub-note">Estimasi skenario dasar (displacement rate WRAP, 2025), bukan pengukuran langsung.</p>
             </div>
 
             <div className="impact-stat-card">
               <div>
-                <span className="stat-number-giant">3.420 PCS</span>
+                <span className="stat-number-giant">{formatCount(summary?.prelovedCompleted)} PCS</span>
                 <div className="stat-divider-line accent"></div>
                 <p className="stat-label-title">Pakaian Dipakai Lagi</p>
               </div>
@@ -359,20 +369,20 @@ export default function HomePage() {
 
             <div className="impact-stat-card">
               <div>
-                <span className="stat-number-giant">1.180 PCS</span>
+                <span className="stat-number-giant">{formatCount(summary?.donationCompleted)} PCS</span>
                 <div className="stat-divider-line"></div>
                 <p className="stat-label-title">Donasi Tersalurkan</p>
               </div>
-              <p className="stat-sub-note">Terdistribusi ke 18 panti dan komunitas marjinal terdata.</p>
+              <p className="stat-sub-note">Tersalurkan ke individu dan organisasi penerima donasi.</p>
             </div>
 
             <div className="impact-stat-card">
               <div>
-                <span className="stat-number-giant">620 PCS</span>
+                <span className="stat-number-giant">{formatCount(summary?.repairsCount)} PCS</span>
                 <div className="stat-divider-line accent"></div>
                 <p className="stat-label-title">Reparasi Sukses</p>
               </div>
-              <p className="stat-sub-note">Direhabilitasi oleh 40+ mitra penjahit lokal binaan.</p>
+              <p className="stat-sub-note">Diperbaiki di layanan reparasi mitra atau secara mandiri.</p>
             </div>
           </div>
 

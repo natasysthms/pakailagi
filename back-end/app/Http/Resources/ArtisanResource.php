@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** Layanan reparasi (repair_services) dalam format "artisan" yang dipakai front end. */
+/** Layanan reparasi (repair_services) dalam format "artisan" yang dipakai front end. Butuh relasi: specialties */
 class ArtisanResource extends JsonResource
 {
     public function toArray(Request $request): array
@@ -15,8 +15,8 @@ class ArtisanResource extends JsonResource
             'name' => $this->name,
             'city' => $this->city,
             'address' => trim($this->city.' • '.$this->address, ' •'),
-            'specialties' => array_values(array_filter(explode(',', (string) $this->specialty_tags))),
-            'specialtyLabel' => $this->specialty,
+            'specialties' => $this->specialties->pluck('code')->all(),          // untuk filter: ['sashiko', 'alterasi']
+            'specialtyLabel' => $this->specialties->pluck('name')->implode(', '), // untuk tampilan
             'description' => $this->description,
             'hours' => $this->opening_hours,
             'whatsapp' => $this->phone,

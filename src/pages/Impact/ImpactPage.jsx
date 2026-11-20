@@ -6,33 +6,40 @@ export default function ImpactPage() {
   const [scenarios, setScenarios] = useState({});
   const [categories, setCategories] = useState([]);
   const [emissionFactors, setEmissionFactors] = useState([]);
+  const [summary, setSummary] = useState(null);
   const [activeScenarioKey, setActiveScenarioKey] = useState('standar');
   useEffect(() => {
     window.scrollTo(0, 0);
 
     async function loadImpactData() {
-      const [scenData, catData, efData] = await Promise.all([
+      const [scenData, catData, efData, summaryData] = await Promise.all([
         impactService.getAllScenarios(),
         impactService.getCategoryBreakdown(),
-        impactService.getEmissionFactors()
+        impactService.getEmissionFactors(),
+        impactService.getSummary()
       ]);
       setScenarios(scenData);
       setCategories(catData);
       setEmissionFactors(efData);
+      setSummary(summaryData);
     }
 
     loadImpactData();
   }, []);
 
+  // Tampilan sementara selama data dari server belum termuat
   const currentScenario = scenarios[activeScenarioKey] || {
-    rateText: '45%',
-    emission: '14.850',
-    metricTotal: '14.850 KG',
-    label: 'Skenario Dasar (Default)',
-    desc: 'Mengasumsikan 45% sirkulasi pakaian bekas secara riil menunda produksi garmen baru.',
-    equiv: 'Setara ~62.000 km perjalanan mobil bensin konvensional',
-    trees: '~742 Bibit Dewasa / Tahun'
+    rateText: '–',
+    emission: '–',
+    metricTotal: '– KG',
+    label: 'Memuat data...',
+    desc: '',
+    equiv: null,
+    trees: null
   };
+
+  // Angka indikator dari GET /impact/summary (hanya transaksi berstatus selesai)
+  const formatCount = (value) => (value == null ? '–' : Number(value).toLocaleString('id-ID'));
 
   return (
     <div className="impact-root">
@@ -60,7 +67,7 @@ export default function ImpactPage() {
                 <span className="badge badge-primary">Circular</span>
               </div>
               <div>
-                <div className="impact-big-num">3.420 PCS</div>
+                <div className="impact-big-num">{formatCount(summary?.prelovedCompleted)} PCS</div>
                 <h3 className="impact-card-title">Transaksi Preloved Selesai</h3>
                 <p className="impact-card-desc">
                   Helai busana arsip yang diadopsi kembali oleh penikmat fesyen baru, mencegah pembelian pakaian fast fashion sekali pakai.
@@ -77,7 +84,7 @@ export default function ImpactPage() {
                 <span className="badge badge-secondary">Mindful</span>
               </div>
               <div>
-                <div className="impact-big-num">1.180 PCS</div>
+                <div className="impact-big-num">{formatCount(summary?.donationCompleted)} PCS</div>
                 <h3 className="impact-card-title">Donasi Pakaian Tersalurkan</h3>
                 <p className="impact-card-desc">
                   Didistribusikan langsung kepada yayasan yatim piatu, panti asuhan, dan komunitas binaan terverifikasi.
@@ -94,7 +101,7 @@ export default function ImpactPage() {
                 <span className="badge badge-primary">Artisan</span>
               </div>
               <div>
-                <div className="impact-big-num">620 PCS</div>
+                <div className="impact-big-num">{formatCount(summary?.repairsCount)} PCS</div>
                 <h3 className="impact-card-title">Pakaian Sukses Diperbaiki</h3>
                 <p className="impact-card-desc">
                   Dipulihkan melalui penjahit lokal mitra. <em>Dihitung terpisah, tidak dimasukkan dalam total estimasi emisi dihindari demi mencegah double-counting.</em>

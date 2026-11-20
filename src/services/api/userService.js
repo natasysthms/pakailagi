@@ -24,7 +24,7 @@
  */
 
 import { mockUserProfile } from '../mockData/profile.js';
-// import { fetchAPI, saveToken, clearToken } from './apiConfig.js'; // Aktifkan saat backend siap
+import { fetchAPI, saveToken, clearToken } from './apiConfig.js'; // Aktifkan saat backend siap
 
 export const userService = {
   /**
@@ -32,7 +32,7 @@ export const userService = {
    * @returns {Promise<object>}
    */
   async getCurrentProfile() {
-    // TODO (backend): return fetchAPI('/auth/me');
+    return fetchAPI('/auth/me');
     return Promise.resolve({ ...mockUserProfile });
   },
 
@@ -42,10 +42,9 @@ export const userService = {
    * @returns {Promise<{ success: boolean, message: string, user: object }>}
    */
   async login(credentials) {
-    // TODO (backend):
-    // const result = await fetchAPI('/auth/login', { method: 'POST', body: JSON.stringify(credentials) });
-    // saveToken(result.token);
-    // return result;
+    const result = await fetchAPI('/auth/login', { method: 'POST', body: JSON.stringify(credentials) });
+    saveToken(result.token);
+    return result;
     console.log('[UserService] Login attempt:', credentials);
     return Promise.resolve({
       success: true,
@@ -60,10 +59,9 @@ export const userService = {
    * @returns {Promise<{ success: boolean, message: string, user: object }>}
    */
   async register(registrationData) {
-    // TODO (backend):
-    // const result = await fetchAPI('/auth/register', { method: 'POST', body: JSON.stringify(registrationData) });
-    // saveToken(result.token);
-    // return result;
+    const result = await fetchAPI('/auth/register', { method: 'POST', body: JSON.stringify(registrationData) });
+    saveToken(result.token);
+    return result;
     console.log('[UserService] Register attempt:', registrationData);
     const roleLabel = registrationData.role === 'consumer' ? 'Konsumen & Donatur' : 'Penjual / Thrift Shop';
     return Promise.resolve({
@@ -78,9 +76,8 @@ export const userService = {
    * @returns {Promise<void>}
    */
   async logout() {
-    // TODO (backend):
-    // await fetchAPI('/auth/logout', { method: 'POST' });
-    // clearToken();
+    await fetchAPI('/auth/logout', { method: 'POST' });
+    clearToken();
     console.log('[UserService] Logout');
     return Promise.resolve();
   },

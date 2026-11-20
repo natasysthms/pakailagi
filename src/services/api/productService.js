@@ -19,7 +19,7 @@
  */
 
 import { mockProducts } from '../mockData/products.js';
-// import { fetchAPI } from './apiConfig.js'; // Aktifkan saat backend siap
+import { fetchAPI } from './apiConfig.js'; // Aktifkan saat backend siap
 
 export const productService = {
   /**
@@ -28,7 +28,7 @@ export const productService = {
    * @returns {Promise<Array>}
    */
   async getAllProducts(filters = {}) {
-    // TODO (backend): return fetchAPI(`/products?${new URLSearchParams(filters)}`);
+    return fetchAPI(`/products?${new URLSearchParams(filters)}`);
     let results = [...mockProducts];
     if (filters.category) results = results.filter((p) => p.category === filters.category);
     if (filters.size) results = results.filter((p) => p.size === filters.size);
@@ -40,7 +40,7 @@ export const productService = {
    * @returns {Promise<Array>}
    */
   async getFeaturedProducts() {
-    // TODO (backend): return fetchAPI('/products/featured');
+    return fetchAPI('/products/featured');
     return Promise.resolve(mockProducts.filter((p) => p.featured).slice(0, 4));
   },
 
@@ -50,7 +50,7 @@ export const productService = {
    * @returns {Promise<object|null>}
    */
   async getProductById(id) {
-    // TODO (backend): return fetchAPI(`/products/${id}`);
+    return fetchAPI(`/products/${id}`);
     const product = mockProducts.find((p) => p.id === id || p.slug === id);
     return Promise.resolve(product || null);
   },
@@ -62,7 +62,7 @@ export const productService = {
    * @returns {Promise<{ success: boolean, message: string }>}
    */
   async submitPurchaseRequest(productId, requestData) {
-    // TODO (backend): return fetchAPI(`/products/${productId}/purchase`, { method: 'POST', body: JSON.stringify(requestData) });
+    return fetchAPI(`/products/${productId}/purchase`, { method: 'POST', body: JSON.stringify(requestData) });
     console.log(`[ProductService] Purchase request for ${productId}:`, requestData);
     return Promise.resolve({
       success: true,

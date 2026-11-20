@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Role extends Model
+{
+    public const KONSUMEN = 'konsumen';
+    public const PENJUAL = 'penjual';
+    public const ADMIN = 'admin';
+
+    protected $fillable = ['name', 'label'];
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+}

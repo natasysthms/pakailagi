@@ -17,7 +17,7 @@
  */
 
 import { mockOrgNeeds, mockDonorItems } from '../mockData/donations.js';
-// import { fetchAPI } from './apiConfig.js'; // Aktifkan saat backend siap
+import { fetchAPI } from './apiConfig.js'; // Aktifkan saat backend siap
 
 export const donationService = {
   /**
@@ -25,7 +25,7 @@ export const donationService = {
    * @returns {Promise<Array>}
    */
   async getOrgNeeds() {
-    // TODO (backend): return fetchAPI('/donations/org-needs');
+    return fetchAPI('/donations/org-needs');
     return Promise.resolve([...mockOrgNeeds]);
   },
 

@@ -22,7 +22,7 @@ export const impactService = {
    * @returns {Promise<object>}
    */
   async getScenarioData(key = 'standar') {
-    // TODO (backend): return fetchAPI(`/impact/scenarios/${key}`);
+    return fetchAPI(`/impact/scenarios/${key}`);
     return Promise.resolve(mockImpactScenarios[key] || mockImpactScenarios.standar);
   },
 
@@ -31,7 +31,7 @@ export const impactService = {
    * @returns {Promise<object>} Key-value: { standar: {...}, optimis: {...}, ... }
    */
   async getAllScenarios() {
-    // TODO (backend): return fetchAPI('/impact/scenarios');
+    return fetchAPI('/impact/scenarios');
     return Promise.resolve(mockImpactScenarios);
   },
 
@@ -40,7 +40,7 @@ export const impactService = {
    * @returns {Promise<Array>}
    */
   async getCategoryBreakdown() {
-    // TODO (backend): return fetchAPI('/impact/categories');
+    return fetchAPI('/impact/categories');
     return Promise.resolve([...mockImpactCategories]);
   },
 
@@ -49,7 +49,7 @@ export const impactService = {
    * @returns {Promise<Array>}
    */
   async getEmissionFactors() {
-    // TODO (backend): return fetchAPI('/impact/emission-factors');
+    return fetchAPI('/impact/emission-factors');
     return Promise.resolve([...mockTextileEmissionFactors]);
   },
 };

@@ -12,7 +12,7 @@
  */
 
 import { mockArtisans } from '../mockData/artisans.js';
-// import { fetchAPI } from './apiConfig.js'; // Aktifkan saat backend siap
+import { fetchAPI } from './apiConfig.js'; // Aktifkan saat backend siap
 
 export const artisanService = {
   /**
@@ -21,7 +21,7 @@ export const artisanService = {
    * @returns {Promise<Array>}
    */
   async getAllArtisans() {
-    // TODO (backend): return fetchAPI(`/artisans?${new URLSearchParams(filters)}`);
+    return fetchAPI(`/artisans?${new URLSearchParams(filters)}`);
     // filters parameter: { city?: string, specialty?: string }
     return Promise.resolve([...mockArtisans]);
   },
@@ -32,7 +32,7 @@ export const artisanService = {
    * @returns {Promise<{ success: boolean, message: string }>}
    */
   async registerArtisan(artisanData) {
-    // TODO (backend): return fetchAPI('/artisans/register', { method: 'POST', body: JSON.stringify(artisanData) });
+    return fetchAPI('/artisans/register', { method: 'POST', body: JSON.stringify(artisanData) });
     console.log('[ArtisanService] Register new artisan:', artisanData);
     return Promise.resolve({
       success: true,

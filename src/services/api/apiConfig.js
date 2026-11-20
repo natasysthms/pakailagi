@@ -20,7 +20,7 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
 
 // Apakah aplikasi sedang dalam mode mock (backend belum tersedia)?
-const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false';
+// const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HELPER FETCH WRAPPER
